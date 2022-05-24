@@ -44,36 +44,5 @@ public class KafkaConsumerConfig {
 	public ConsumerFactory<String, Object> consumerFactory() {
 		 return new DefaultKafkaConsumerFactory<>(config());
 	}
-
-	
-//	@Bean
-//	public ConcurrentKafkaListenerContainerFactory<String,Object> factory(
-//			ConsumerFactory<String, Object> consumerFactory
-//		){
-//		
-//		ConcurrentKafkaListenerContainerFactory<String, Object> factory = 
-//				new ConcurrentKafkaListenerContainerFactory<String, Object>();
-//		factory.setConsumerFactory(consumerFactory);
-//		
-//		return factory;
-//	}
-//	
-//	public ConsumerFactory<String, Book> consumerFactory() {
-//        Map<String, Object> props = new HashMap<>();
-//        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstarpServers);
-//        props.put(ConsumerConfig.GROUP_ID_CONFIG, "groupId");
-//        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-//        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(Book.class));
-//    }
-//	
-//	 @Bean
-//	    public ConcurrentKafkaListenerContainerFactory<String, Book> userKafkaListenerContainerFactory() {
-//	        ConcurrentKafkaListenerContainerFactory<String, Book> factory = new ConcurrentKafkaListenerContainerFactory<>();
-//	        factory.setConsumerFactory(consumerFactory());
-//	        factory.setMessageConverter(new StringJsonMessageConverter());
-//	        return factory;
-//	    }
-    
-
    
 }
