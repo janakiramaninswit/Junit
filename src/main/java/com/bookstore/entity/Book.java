@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,11 +19,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name="book")
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Book implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -117,4 +115,11 @@ public class Book implements Serializable {
 		this.price = price;
 	}
 
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", name=" + name + ", author=" + author + ", publication=" + publication
+				+ ", category=" + category + ", pages=" + pages + ", price=" + price + "]";
+	}
+	
+	
 }

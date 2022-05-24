@@ -30,6 +30,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.bookstore.controller.BookStoreController;
+import com.bookstore.dao.BookStoreDAO;
+import com.bookstore.dao.IBookStoreDAO;
 import com.bookstore.entity.Book;
 import com.bookstore.services.BookStoreService;
 import com.bookstore.services.IBookStoreService;
@@ -47,6 +49,9 @@ public class BookControllerTest {
 	
 	@Mock
 	BookStoreService bookStoreService;
+	
+	@Mock
+	BookStoreDAO BookStoreDAO;
 	
 	@InjectMocks
 	BookStoreController bookStoreController;
@@ -109,6 +114,8 @@ public class BookControllerTest {
 		
 		Mockito.when(bookStoreService.createBook(book1)).thenReturn(book1);
 		
+		Mockito.when(bookStoreService.createBook(book1)).thenReturn(book1);
+		
 		MockHttpServletRequestBuilder reqBuilder = MockMvcRequestBuilders.post("/bookservice/books")
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON).content(content);
@@ -126,6 +133,7 @@ public class BookControllerTest {
 		Book book1 = new Book(1,"java","janakiraman","","",1,1);
 		
 		String contentStr = writer.writeValueAsString(book1);
+		Mockito.when(BookStoreDAO.getBook(book1.getId())).thenReturn(book1);
 		Mockito.when(bookStoreService.updateBook(book1.getId(), book1)).thenReturn(book1);
 		
 		MockHttpServletRequestBuilder reqBuilder = MockMvcRequestBuilders.put("/bookservice/books/1")
@@ -135,7 +143,7 @@ public class BookControllerTest {
 		movMVC.perform(reqBuilder)
 			.andExpect(status().isOk());
 			//.andExpect(MockMvcResultMatchers.jsonPath("$", notNullValue()))
-			//.andExpect(MockMvcResultMatchers.jsonPath("$.author", is("janakiraman")))
+			//.andExpect(MockMvcResultMatchers.jsonPath("$.author", is("janakiraman")));
 		
 	}
 	
@@ -154,6 +162,24 @@ public class BookControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$", notNullValue()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$", is("Book has been deleted successfully")));
+		
+	}
+	
+	@Test
+	public void deleteBook_failure() throws Exception {
+		
+		Book book1 = new Book(10,"java","jana","","",1,1);
+		
+		Mockito.when(bookStoreService.deleteBook(book1.getId())).thenReturn(false);
+		
+		MockHttpServletRequestBuilder reqBuilder = MockMvcRequestBuilders.delete("/bookservice/books/10")
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON);
+		
+		movMVC.perform(reqBuilder)
+			.andExpect(status().isInternalServerError())
+			.andExpect(MockMvcResultMatchers.jsonPath("$", notNullValue()))
+			.andExpect(MockMvcResultMatchers.jsonPath("$", is("Error while deleting book from database")));
 		
 	}
 	
